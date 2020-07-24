@@ -41,7 +41,9 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
     "users.apps.UsersConfig",
-    "clothes.apps.ClothesConfig",
+    "tops.apps.TopsConfig",
+    "pants.apps.PantsConfig",
+    "shoes.apps.ShoesConfig",
 ]
 
 THIRD_PARTY_APPS = [

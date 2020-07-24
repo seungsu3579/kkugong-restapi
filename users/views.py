@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
@@ -7,6 +6,7 @@ from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
 from .serializers import UserSerializer
+from .models import User
 import jwt
 
 
@@ -21,8 +21,8 @@ class UserMyView(APIView):
     def put(self, request):
         serializer = UserSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
-            return Response()
+            user = serializer.save()
+            return Response(UserSerializer(user).data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -46,3 +46,26 @@ def login(request):
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(["POST"])
+def create_account(request):
+    serializer = UserSerializer(data=request.data)
+
+    # check necessary fields
+    check_fields = [
+        "email",
+        "gender",
+        "birthday",
+        "nickname",
+        "age",
+    ]
+    for field in check_fields:
+        if field not in list(request.data.keys()):
+            reply = {"field": field}
+            return Response(data=reply, status=status.HTTP_400_BAD_REQUEST)
+
+    if serializer.is_valid():
+        user = serializer.save()
+        return Response(data=UserSerializer(user).data)
+    else:
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
