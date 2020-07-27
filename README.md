@@ -45,3 +45,33 @@ pipenv로 파이썬 라이브러리 버전관리
 - django server 실행
 
   > `$ python manage.py runserver 0.0.0.0:8000`
+
+## 4. MysqlDB 연결
+
+- 1. docker image로 관리, data는 볼륨 마운트를 통해 로컬에 저장
+
+> `$ docker run -d --name=mysql -e MYSQL_ROOT_PASSWORD=(pw) -v (data_directory):/var/lib/mysql seungsu3579/mysql:1.0 /bin/bash`
+
+- 2. mysql 컨테이너에 접속하여 django rest api 용 관리자 계정 생성 후 권한 할당
+
+> `$ docker exec -it mysql mysql -u root -p` > `mysql> create user '(id)'@'%' identified by '(pw)';` > `mysql> grant all privileges on (database).* to '(id)'@'%';`
+
+- 3. django의 settings.py에 DATABASE설정 변경
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '(database_name)',
+        'USER': '(admin_id)',
+        'PASSWORD': '(admin_pw)',
+        'HOST': '(mysql container IP)',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
+    }
+}
+```
+
+- migrate!

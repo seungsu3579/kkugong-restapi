@@ -57,20 +57,3 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)  # user객체 password 암호화해서 저장
         user.save()  # user 저장
         return user
-
-
-class UserClosetSerializer(serializers.ModelSerializer):
-
-    tops = TopsSerializer()
-    pants = PantsSerializer()
-    shoes = ShoesSerializer()
-
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "tops",
-            "pants",
-            "shoes",
-        )
-        read_only_fields = ("id",)
