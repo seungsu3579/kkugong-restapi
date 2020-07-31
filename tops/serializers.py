@@ -6,6 +6,7 @@ class TopsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tops
         fields = (
+            "id",
             "_id",
             "brand",
             "product",
@@ -13,6 +14,7 @@ class TopsSerializer(serializers.ModelSerializer):
         )
 
         read_only_fields = (
+            "id",
             "_id",
             "brand",
             "product",

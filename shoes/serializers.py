@@ -6,6 +6,7 @@ class ShoesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shoes
         fields = (
+            "id",
             "_id",
             "brand",
             "product",
@@ -13,6 +14,7 @@ class ShoesSerializer(serializers.ModelSerializer):
         )
 
         read_only_fields = (
+            "id",
             "_id",
             "brand",
             "product",

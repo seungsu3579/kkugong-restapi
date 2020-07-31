@@ -98,7 +98,7 @@ DATABASES = {
         "NAME": "kkugong",
         "USER": "kkugong_api",
         "PASSWORD": "tmp1234",
-        "HOST": "172.17.0.6",
+        "HOST": "172.17.0.2",
         "PORT": "3306",
         "OPTIONS": {"init_command": 'SET sql_mode="STRICT_TRANS_TABLES"'},
     }

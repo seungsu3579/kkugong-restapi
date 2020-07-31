@@ -5,4 +5,5 @@ app_name = "pants"
 
 urlpatterns = [
     path("<int:_id>", pants_views.detail_pants),
+    path("similarity/", pants_views.similarity),
 ]

@@ -48,6 +48,8 @@ pipenv로 파이썬 라이브러리 버전관리
 
 ## 4. MysqlDB 연결
 
+장고의 디폴트 데이터베이스(SQLite)를 사용하기에는 제약이 있었다.
+
 - 1. docker image로 관리, data는 볼륨 마운트를 통해 로컬에 저장
 
 > `$ docker run -d --name=mysql -e MYSQL_ROOT_PASSWORD=(pw) -v (data_directory):/var/lib/mysql seungsu3579/mysql:1.0 /bin/bash`
