@@ -86,23 +86,23 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-#     }
-# }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "kkugong",
-        "USER": "kkugong_api",
-        "PASSWORD": "tmp1234",
-        "HOST": "172.17.0.2",
-        "PORT": "3306",
-        "OPTIONS": {"init_command": 'SET sql_mode="STRICT_TRANS_TABLES"'},
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "kkugong",
+#         "USER": "kkugong_api",
+#         "PASSWORD": "tmp1234",
+#         "HOST": "172.17.0.3",
+#         "PORT": "3306",
+#         "OPTIONS": {"init_command": 'SET sql_mode="STRICT_TRANS_TABLES"'},
+#     }
+# }
 
 
 # Password validation
@@ -136,6 +136,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+MEDIA_URL = "/media/"
 
 AUTH_USER_MODEL = "users.User"
 

@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
 from .serializers import TopsSerializer
 from .models import Tops
 
@@ -34,10 +35,10 @@ class UserTopsView(APIView):
 
     def put(self, request):
         user = request.user
-        data_id = request.data.get("id")
+        data_id = request.data.get("_id")
         if data_id is not None:
             try:
-                tops = Tops.objects.get(id=data_id)
+                tops = Tops.objects.get(_id=data_id)
                 if tops in user.tops.all():
                     user.tops.remove(tops)
                 else:
