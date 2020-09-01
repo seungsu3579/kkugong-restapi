@@ -14,9 +14,9 @@ class TopImageSerializer(serializers.ModelSerializer):
 
         read_only_fields = (
             "_id",
-            "brand",
-            "product",
-            "item_url",
+            "img_url",
+            "img_dir",
+            "top",
         )
 
 
@@ -38,4 +38,5 @@ class TopsSerializer(serializers.ModelSerializer):
             "brand",
             "product",
             "item_url",
+            "images",
         )

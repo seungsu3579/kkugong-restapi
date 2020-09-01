@@ -16,10 +16,7 @@ class ShoesImageAdmin(admin.ModelAdmin):
     """Shoes Image Admin Definition"""
 
     fieldsets = (
-        (
-            "Custom Profile",
-            {"fields": ("_id", "img_url", "img_dir", "vector", "shoes",)},
-        ),
+        ("Custom Profile", {"fields": ("_id", "img_url", "img_dir", "shoes",)},),
     )
 
     list_display = ("__str__", "get_thumbnail")

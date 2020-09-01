@@ -16,10 +16,7 @@ class TopsImageAdmin(admin.ModelAdmin):
     """Tops Image Admin Definition"""
 
     fieldsets = (
-        (
-            "Custom Profile",
-            {"fields": ("_id", "img_url", "img_dir", "vector", "top",)},
-        ),
+        ("Custom Profile", {"fields": ("_id", "img_url", "img_dir", "top",)},),
     )
 
     list_display = ("__str__", "get_thumbnail")
