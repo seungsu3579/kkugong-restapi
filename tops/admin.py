@@ -6,7 +6,7 @@ from . import models
 @admin.register(models.Tops)
 class TopsAdmin(admin.ModelAdmin):
     fieldsets = (
-        ("Custom Profile", {"fields": ("_id", "brand", "product", "item_url",)},),
+        ("Custom Profile", {"fields": ("id", "brand", "product", "item_url",)},),
     )
 
 
@@ -15,9 +15,7 @@ class TopsImageAdmin(admin.ModelAdmin):
 
     """Tops Image Admin Definition"""
 
-    fieldsets = (
-        ("Custom Profile", {"fields": ("_id", "img_url", "img_dir", "top",)},),
-    )
+    fieldsets = (("Custom Profile", {"fields": ("id", "img_url", "img", "top",)},),)
 
     list_display = ("__str__", "get_thumbnail")
 

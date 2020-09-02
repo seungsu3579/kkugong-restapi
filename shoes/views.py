@@ -9,9 +9,9 @@ from .models import Shoes
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detail_shoes(request, _id):
+def detail_shoes(request, id):
     try:
-        shoes = Shoes.objects.get(_id=_id)
+        shoes = Shoes.objects.get(id=id)
         return Response(data=ShoesSerializer(shoes).data)
     except Shoes.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

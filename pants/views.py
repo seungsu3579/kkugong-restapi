@@ -2,15 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
 from .serializers import PantsSerializer
 from .models import Pants
 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detail_pants(request, _id):
+def detail_pants(request, id):
     try:
-        pants = Pants.objects.get(_id=_id)
+        pants = Pants.objects.get(id=id)
         return Response(data=PantsSerializer(pants).data)
     except Pants.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

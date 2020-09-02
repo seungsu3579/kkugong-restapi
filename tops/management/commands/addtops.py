@@ -2,7 +2,6 @@ import json
 from django.core.management.base import BaseCommand
 from tops.models import Tops, TopsImage
 from config import settings
-
 import socket
 import numpy as np
 
@@ -20,7 +19,7 @@ class Command(BaseCommand):
 
         #### socket ####
         TOP_HOST = "172.17.0.2"
-        TOP_PORT = 9999
+        TOP_PORT = 10001
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((TOP_HOST, TOP_PORT))
         ################
@@ -29,44 +28,42 @@ class Command(BaseCommand):
             json_data = json.load(json_file)
 
         for j in json_data:
-            _id = list(j.keys())[0]
-            if _id[3] == "1":
-                print(f"Add  {_id}")
-                if not Tops.objects.filter(_id=_id):
+            id = list(j.keys())[0]
+            if id[3] == "1":
+                print(f"Add  {id}")
+                if not Tops.objects.filter(id=id):
                     top = Tops.objects.create(
-                        _id=_id,
-                        brand=j[_id]["brand"],
-                        product=j[_id]["product"],
-                        item_url=j[_id]["url"],
+                        id=id,
+                        brand=j[id]["brand"],
+                        product=j[id]["product"],
+                        item_url=j[id]["url"],
                     )
-                    if len(j[_id]["img"]) == 1:
-                        img_id = _id
+                    if len(j[id]["img"]) == 1:
+                        img_id = id
                         img_dir = MEDIA_DIR + "/top/" + img_id + ".jpg"
+                        img = f"top/{img_id}.jpg"
 
                         client_socket.sendall(img_dir.encode())
                         data = client_socket.recv(1024)
-                        print(data)
+
                         TopsImage.objects.create(
-                            _id=img_id,
-                            img_url=j[_id]["img"][0],
-                            img_dir=img_dir,
+                            id=img_id,
+                            img_url=j[id]["img"][0],
+                            img=img,
                             vector=data,
                             top=top,
                         )
                     else:
-                        for i, img in enumerate(j[_id]["img"]):
-                            img_id = _id + "_" + str(i + 1)
+                        for i, img in enumerate(j[id]["img"]):
+                            img_id = id + "_" + str(i + 1)
                             img_dir = MEDIA_DIR + "/top/" + img_id + ".jpg"
+                            img = f"top/{img_id}.jpg"
 
                             client_socket.sendall(img_dir.encode())
                             data = client_socket.recv(1024)
-                            print(data)
+
                             TopsImage.objects.create(
-                                _id=img_id,
-                                img_url=img,
-                                img_dir=img_dir,
-                                vector=data,
-                                top=top,
+                                id=img_id, img_url=img, img=img, vector=data, top=top,
                             )
         self.stdout.write(
             self.style.SUCCESS(f"All items from file({file}) is added to Database!")

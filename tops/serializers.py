@@ -6,16 +6,16 @@ class TopImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopsImage
         fields = (
-            "_id",
+            "id",
             "img_url",
-            "img_dir",
+            "img",
             "top",
         )
 
         read_only_fields = (
-            "_id",
+            "id",
             "img_url",
-            "img_dir",
+            "img",
             "top",
         )
 
@@ -26,7 +26,7 @@ class TopsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tops
         fields = (
-            "_id",
+            "id",
             "brand",
             "product",
             "item_url",
@@ -34,7 +34,7 @@ class TopsSerializer(serializers.ModelSerializer):
         )
 
         read_only_fields = (
-            "_id",
+            "id",
             "brand",
             "product",
             "item_url",

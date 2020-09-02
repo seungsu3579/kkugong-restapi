@@ -6,17 +6,17 @@ class ShoesImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoesImage
         fields = (
-            "_id",
+            "id",
             "img_url",
-            "img_dir",
-            "top",
+            "img",
+            "shoes",
         )
 
         read_only_fields = (
-            "_id",
+            "id",
             "img_url",
-            "img_dir",
-            "top",
+            "img",
+            "shoes",
         )
 
 
@@ -26,7 +26,7 @@ class ShoesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shoes
         fields = (
-            "_id",
+            "id",
             "brand",
             "product",
             "item_url",
@@ -34,7 +34,7 @@ class ShoesSerializer(serializers.ModelSerializer):
         )
 
         read_only_fields = (
-            "_id",
+            "id",
             "brand",
             "product",
             "item_url",

@@ -9,9 +9,9 @@ from .models import Tops
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detail_tops(request, _id):
+def detail_tops(request, id):
     try:
-        tops = Tops.objects.get(_id=_id)
+        tops = Tops.objects.get(id=id)
         return Response(data=TopsSerializer(tops).data)
     except Tops.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -35,10 +35,10 @@ class UserTopsView(APIView):
 
     def put(self, request):
         user = request.user
-        data_id = request.data.get("_id")
+        data_id = request.data.get("id")
         if data_id is not None:
             try:
-                tops = Tops.objects.get(_id=data_id)
+                tops = Tops.objects.get(id=data_id)
                 if tops in user.tops.all():
                     user.tops.remove(tops)
                 else:
