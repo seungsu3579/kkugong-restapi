@@ -17,9 +17,9 @@ class TopsImageAdmin(admin.ModelAdmin):
 
     fieldsets = (("Custom Profile", {"fields": ("id", "img_url", "img", "top",)},),)
 
-    list_display = ("__str__", "get_thumbnail")
+    # list_display = ("__str__", "get_thumbnail")
 
-    def get_thumbnail(self, obj):
-        return mark_safe(f'<img src="{obj.img_url}" width=50>')
+    # def get_thumbnail(self, obj):
+    #     return mark_safe(f'<img src="{obj.img}" width=50>')
 
-    get_thumbnail.short_description = "Thumbnail"
+    # get_thumbnail.short_description = "Thumbnail"
