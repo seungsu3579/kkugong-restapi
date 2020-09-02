@@ -3,6 +3,7 @@ from tops.models import TopsImage
 from pants.models import PantsImage
 from shoes.models import ShoesImage
 import numpy as np
+import pandas as pd
 
 
 class Matrix:
@@ -10,35 +11,34 @@ class Matrix:
         vector = np.frombuffer(data, dtype=np.float32).reshape(1, 50)
         return vector
 
-    # def topMatrixToCsv(self):
-    #     print("========= STEP 1 (TOP) =========")
-    #     matrix = []
-    #     for img in TopsImage.objects.all():
-    #         row = list()
-    #         row.append(img._id)
+    def topMatrixToCsv(self):
+        matrix = []
+        for img in TopsImage.objects.all():
+            row = list()
+            row.append(img._id)
 
-    #         vector = bitToVector(img.vector)
-    #         for i in range(50):
-    #             row.append(vector[0][i])
+            if img.vector == b"":
+                continue
 
-    #         matrix.append(row)
+            vector = self.bitToVector(img.vector)
+            for i in range(50):
+                row.append(vector[0][i])
 
-    #     columns = []
-    #     columns.append("id")
-    #     for k in range(50):
-    #         col = f"col{k}"
-    #         columns.append(col)
+            matrix.append(row)
 
-    #     df = pd.DataFrame(matrix, columns=columns)
-    #     df.to_csv("./matrix_top.csv", encoding="utf-8")
+        columns = []
+        columns.append("id")
+        for k in range(50):
+            col = f"col{k}"
+            columns.append(col)
 
-    # print("========= STEP 2 (PANTS) =========")
+        df = pd.DataFrame(matrix, columns=columns)
+        df.to_csv("./matrix_top.csv", encoding="utf-8")
 
-    # print("========= STEP 3 (SHOES) =========")
+        print("top image vector >> csv matrix")
+        print("Complete")
 
     def topMatrixToNPY(self):
-
-        print("========= STEP 1 (TOP) =========")
         matrix = "0"
         for img in TopsImage.objects.all():
             if matrix == "0":
@@ -57,6 +57,9 @@ class Matrix:
                     matrix = np.append(matrix, vector, axis=0)
 
         np.save("./matrix_top.npy", matrix)
+
+        print("top image vector >> npy matrix")
+        print("Complete")
 
     def npyToMatrix(self, dir):
         matrix = np.load(dir)

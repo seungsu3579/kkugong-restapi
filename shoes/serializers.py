@@ -21,7 +21,7 @@ class ShoesImageSerializer(serializers.ModelSerializer):
 
 
 class ShoesSerializer(serializers.ModelSerializer):
-    images = ShoesImageSerializer()
+    images = ShoesImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Shoes

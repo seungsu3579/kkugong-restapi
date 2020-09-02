@@ -38,3 +38,11 @@ class Message:
 
         vector = np.frombuffer(data, dtype=np.float32).reshape(1, 50)
         return vector
+
+    def recommand(self, data):
+        self.client_socket.sendall(data)
+        data = self.client_socket.recv(1024)
+        recommands = data.decode()
+
+        return recommands
+

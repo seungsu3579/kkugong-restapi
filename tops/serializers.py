@@ -21,7 +21,7 @@ class TopImageSerializer(serializers.ModelSerializer):
 
 
 class TopsSerializer(serializers.ModelSerializer):
-    images = TopImageSerializer()
+    images = TopImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tops
