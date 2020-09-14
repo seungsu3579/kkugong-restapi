@@ -5,5 +5,5 @@ app_name = "tops"
 
 urlpatterns = [
     path("<int:id>", tops_views.detail_tops),
-    path("similarity/", tops_views.similarity),
+    path("recognition/", tops_views.recognition),
 ]

@@ -25,10 +25,11 @@ class UserSerializer(serializers.ModelSerializer):
             "birthday",
             "nickname",
             "age",
-            "tops",
-            "pants",
-            "shoes",
         )
+        # "tops",
+        # "pants",
+        # "shoes",
+
         # 읽기만 가능한 fields
         read_only_fields = ("id",)
 

@@ -10,6 +10,11 @@ class PantsAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(models.UserPants)
+class UserPantsAdmin(admin.ModelAdmin):
+    fieldsets = (("Custom Profile", {"fields": ("id", "user", "img", "meta_pants",)},),)
+
+
 @admin.register(models.PantsImage)
 class PantsImageAdmin(admin.ModelAdmin):
 

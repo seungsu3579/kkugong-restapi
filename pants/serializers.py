@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pants, PantsImage
+from .models import Pants, PantsImage, UserPants
 
 
 class PantsImageSerializer(serializers.ModelSerializer):
@@ -39,4 +39,24 @@ class PantsSerializer(serializers.ModelSerializer):
             "product",
             "item_url",
             "images",
+        )
+
+
+class UserPantsSerializer(serializers.ModelSerializer):
+    meta_pants = PantsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = UserPants
+        fields = (
+            "id",
+            "user",
+            "img",
+            "meta_pants",
+        )
+
+        read_only_fields = (
+            "id",
+            "user",
+            "img",
+            "meta_pants",
         )

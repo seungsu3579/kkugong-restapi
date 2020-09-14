@@ -42,7 +42,12 @@ class Message:
     def recommand(self, data):
         self.client_socket.sendall(data)
         data = self.client_socket.recv(1024)
-        recommands = data.decode()
+        recommands = data.decode().split(",")
+        img_ids = []
+        for img_id in recommands:
+            if len(img_id) == 13:
+                img_id = img_id[:-1] + "_" + img_id[-1]
+            img_ids.append(img_id)
 
-        return recommands
+        return img_ids
 

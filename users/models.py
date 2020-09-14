@@ -11,6 +11,6 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=20, default="no_name")
     age = models.IntegerField(default=0)
 
-    tops = models.ManyToManyField("tops.Tops", related_name="tops")
-    pants = models.ManyToManyField("pants.Pants", related_name="pants")
-    shoes = models.ManyToManyField("shoes.Shoes", related_name="shoes")
+    # tops = models.ManyToManyField("tops.UserTops", related_name="tops")
+    # pants = models.ManyToManyField("pants.UserPants", related_name="pants")
+    # shoes = models.ManyToManyField("shoes.UserShoes", related_name="shoes")

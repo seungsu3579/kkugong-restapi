@@ -77,3 +77,7 @@ DATABASES = {
 ```
 
 - migrate!
+
+## 5. vectorization
+
+## 4. utils

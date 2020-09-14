@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tops, TopsImage
+from .models import Tops, TopsImage, UserTops
 
 
 class TopImageSerializer(serializers.ModelSerializer):
@@ -39,4 +39,24 @@ class TopsSerializer(serializers.ModelSerializer):
             "product",
             "item_url",
             "images",
+        )
+
+
+class UserTopsSerializer(serializers.ModelSerializer):
+    meta_top = TopsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = UserTops
+        fields = (
+            "id",
+            "user",
+            "img",
+            "meta_top",
+        )
+
+        read_only_fields = (
+            "id",
+            "user",
+            "img",
+            "meta_top",
         )

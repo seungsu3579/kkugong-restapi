@@ -3,7 +3,6 @@ from django.core.management.base import BaseCommand
 from tops.models import Tops, TopsImage
 from config import settings
 import socket
-import numpy as np
 
 
 class Command(BaseCommand):
