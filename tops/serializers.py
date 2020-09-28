@@ -43,19 +43,17 @@ class TopsSerializer(serializers.ModelSerializer):
 
 
 class UserTopsSerializer(serializers.ModelSerializer):
-    meta_top = TopsSerializer(many=True, read_only=True)
+    meta_top = TopsSerializer(read_only=True)
 
     class Meta:
         model = UserTops
         fields = (
-            "id",
             "user",
             "img",
             "meta_top",
         )
 
         read_only_fields = (
-            "id",
             "user",
             "img",
             "meta_top",

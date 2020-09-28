@@ -76,12 +76,13 @@ def recognition(request):
 
         userTop_serializer = UserTopsSerializer(top_obj)
 
-    new_dict = {
-        "userTop_obj": userTop_serializer.data,
-        "similar_things": topImage_serializer.data,
-    }
+        new_dict = {
+            "userTop_obj": userTop_serializer.data,
+            "similar_things": topImage_serializer.data,
+        }
 
-    return Response(new_dict)
+        return Response(new_dict)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserTopsView(APIView):

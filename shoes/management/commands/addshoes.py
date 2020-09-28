@@ -17,10 +17,10 @@ class Command(BaseCommand):
         MEDIA_DIR = settings.MEDIA_ROOT
 
         #### socket ####
-        TOP_HOST = "172.17.0.2"
-        TOP_PORT = 10001
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect((TOP_HOST, TOP_PORT))
+        client_socket.connect(
+            (settings.SHOES_VECTORIZATION_HOST, settings.SHOES_VECTORIZATION_PORT)
+        )
         ################
 
         with open(file, "r", encoding="utf-8") as json_file:

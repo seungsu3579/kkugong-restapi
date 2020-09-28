@@ -20,7 +20,7 @@ class Message:
 
         self.client_socket.sendall(img.encode())
         data = self.client_socket.recv(1024)
-        vector = np.frombuffer(data, dtype=np.float32).reshape(1, 50)
+        vector = np.frombuffer(data, dtype=np.float32).reshape(1, 64)
 
         return vector
 
@@ -36,7 +36,7 @@ class Message:
     def bitToVector(self, data):
         import numpy as np
 
-        vector = np.frombuffer(data, dtype=np.float32).reshape(1, 50)
+        vector = np.frombuffer(data, dtype=np.float32).reshape(1, 64)
         return vector
 
     def recommand(self, data):
