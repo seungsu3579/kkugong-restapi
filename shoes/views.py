@@ -39,7 +39,8 @@ def recognition(request):
     form = ShoesUploadFileForm(request.POST, request.FILES)
     if form.is_valid():
         shoes_obj = form.save()
-        img_dir = settings.MEDIA_ROOT + "/" + str(shoes_obj.img)
+        img_dir = str(shoes_obj.img)
+        # img_dir = settings.MEDIA_ROOT + "/" + str(shoes_obj.img)
         if img_dir[-3:] != "jpg":
 
             tmp_img = Image.open(img_dir).convert("RGB")

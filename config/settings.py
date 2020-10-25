@@ -64,6 +64,7 @@ PROJECT_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "storages",
     "rest_framework",
 ]
 
@@ -106,7 +107,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": os.path.join(BASE_DIR, "db_test.sqlite3"),
     }
 }
 # DATABASES = {
@@ -153,6 +154,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+### AWS ###
+AWS_ACCESS_KEY_ID = "AKIAT2WNRTLX4AWNEVOK"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_REGION = "ap-northeast-2"
+
+### S3 Storages ###
+AWS_STORAGE_BUCKET_NAME = "dressroom-base-data"
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com"
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 

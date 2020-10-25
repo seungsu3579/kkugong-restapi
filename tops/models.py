@@ -28,4 +28,3 @@ class TopsImage(models.Model):
     img = models.ImageField(upload_to="top")
     vector = models.BinaryField(max_length=250)
     top = models.ForeignKey(Tops, on_delete=models.CASCADE, related_name="images")
-

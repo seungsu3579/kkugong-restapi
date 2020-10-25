@@ -23,6 +23,19 @@ class Command(BaseCommand):
         )
         ################
 
+        ###### s3 ######
+        AWS_ACCESS_KEY_ID = "AKIAT2WNRTLX4AWNEVOK"
+        AWS_SECRET_ACCESS_KEY = "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"
+        AWS_REGION = "ap-northeast-2"
+
+        s3 = boto3.client(
+            "s3",
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name=AWS_REGION,
+        )
+        ################
+
         with open(file, "r", encoding="utf-8") as json_file:
             json_data = json.load(json_file)
 
@@ -37,37 +50,49 @@ class Command(BaseCommand):
                         product=j[id]["product"],
                         item_url=j[id]["url"],
                     )
+
                     if len(j[id]["img"]) == 1:
                         img_id = id
-                        img_dir = MEDIA_DIR + "/pants/" + img_id + ".jpg"
                         img = f"pants/{img_id}.jpg"
 
-                        client_socket.sendall(img_dir.encode())
-                        data = client_socket.recv(1024)
-
-                        PantsImage.objects.create(
-                            id=img_id,
-                            img_url=j[id]["img"][0],
-                            img=img,
-                            vector=data,
-                            pants=pants,
-                        )
-                    else:
-                        for i, img in enumerate(j[id]["img"]):
-                            img_id = id + "_" + str(i + 1)
-                            img_dir = MEDIA_DIR + "/pants/" + img_id + ".jpg"
-                            img = f"pants/{img_id}.jpg"
-
-                            client_socket.sendall(img_dir.encode())
+                        try:
+                            s3.get_object(Bucket="dressroom-base-data", Key=img)
+                            client_socket.sendall(img.encode())
                             data = client_socket.recv(1024)
 
                             PantsImage.objects.create(
                                 id=img_id,
-                                img_url=img,
+                                img_url=j[id]["img"][0],
                                 img=img,
                                 vector=data,
                                 pants=pants,
                             )
+
+                        except:
+                            continue
+
+                    else:
+                        count = 1
+                        for img_url in j[id]["img"]:
+                            img_id = id + "_" + str(count + 1)
+                            img = f"pants/{img_id}.jpg"
+
+                            try:
+                                s3.get_object(Bucket="dressroom-base-data", Key=img)
+                                client_socket.sendall(img.encode())
+                                data = client_socket.recv(1024)
+
+                                PantsImage.objects.create(
+                                    id=img_id,
+                                    img_url=img_url,
+                                    img=img,
+                                    vector=data,
+                                    pants=pants,
+                                )
+                                count += 1
+                            except:
+                                pass
+
         self.stdout.write(
             self.style.SUCCESS(f"All items from file({file}) is added to Database!")
         )

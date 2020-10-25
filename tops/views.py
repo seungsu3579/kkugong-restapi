@@ -42,7 +42,8 @@ def recognition(request):
     form = TopUploadFileForm(request.POST, request.FILES)
     if form.is_valid():
         top_obj = form.save()
-        img_dir = settings.MEDIA_ROOT + "/" + str(top_obj.img)
+        img_dir = str(top_obj.img)
+        # img_dir = settings.MEDIA_ROOT + "/" + str(top_obj.img)
         # change image file format
         if img_dir[-3:] != "jpg":
             tmp_img = Image.open(img_dir).convert("RGB")
@@ -56,6 +57,7 @@ def recognition(request):
         vector_ms = Message(
             settings.TOP_VECTORIZATION_HOST, settings.TOP_VECTORIZATION_PORT
         )
+        print(img_dir)
         bit_vector = vector_ms.topToBit(img_dir)
 
         if bit_vector == b"":
