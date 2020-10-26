@@ -14,7 +14,7 @@ class Message:
         self.client_socket.close()
 
     # @logging_time
-    def topToVector(self, img):
+    def imgToVector(self, img):
         # img : 이미지 이름(url)
         import numpy as np
 
@@ -24,7 +24,7 @@ class Message:
 
         return vector
 
-    def topToBit(self, img):
+    def imgToBit(self, img):
         # img : 이미지 이름(url)
         import numpy as np
 

@@ -49,15 +49,13 @@ def recognition(request):
             img_dir = img_dir[:-3] + "jpg"
             tmp_img.save(img_dir)
             os.remove(img_dir[:-3] + img_extension)
-            pants_obj.img = img_dir
-        print(pants_obj.img)
-        print(vars(pants_obj))
+            pants_obj.img = str(pants_obj.img)[:-3] + "jpg"
 
         # set pants recognition server
         vector_ms = Message(
             settings.PANTS_VECTORIZATION_HOST, settings.PANTS_VECTORIZATION_PORT
         )
-        bit_vector = vector_ms.topToBit(img_dir)
+        bit_vector = vector_ms.imgToBit(img_dir)
         #
 
         if bit_vector == b"":
@@ -70,9 +68,21 @@ def recognition(request):
 
             items = PantsImage.objects.filter(id__in=recommands)
 
-        serializer = PantsImageSerializer(items, many=True)
+        pantsImage_serializer = PantsImageSerializer(items, many=True)
 
-    return Response(serializer.data)
+        pants_obj.user = user
+        pants_obj.vector = bit_vector
+        pants_obj.save()
+
+        userPants_serializer = UserPantsSerializer(pants_obj)
+
+        new_dict = {
+            "userPants_obj": userPants_serializer.data,
+            "similar_things": pantsImage_serializer.data,
+        }
+
+        return Response(new_dict)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserPantsView(APIView):
@@ -84,17 +94,43 @@ class UserPantsView(APIView):
         serializer = PantsSerializer(user.userPants.all(), many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        # request : {
+        #     "userPants_obj" : { return of id user pants obj },
+        #     "save_img" : { image that show on the app },
+        #     "save_vector" : { image that representative vector },
+        # }
+
+        userPants_id = request.data.get("userPants_obj")
+        userPants = UserPants.objects.get(id=userPants_id)
+        userPants.img = request.data.get("save_img")
+        userPants.nickname = request.data.get("cloth_nickname")
+
+        save_vector = request.data.get("save_vector")
+        if userPants is not None:
+            if save_vector is None:
+                pass
+            else:
+                similar_img = PantsImage.objects.get(id=save_vector)
+                userPants.meta_pants = similar_img.pants
+                userPants.vector = similar_img.vector
+                print(similar_img.vector)
+                print(similar_img.pants)
+            userPants.save()
+            return Response()
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     def put(self, request):
         user = request.user
         data_id = request.data.get("id")
         if data_id is not None:
             try:
-                pants = UserPants.objects.get(id=data_id)
-                if pants in user.userPants.all():
-                    user.userPants.remove(pants)
+                tops = UserPants.objects.get(id=data_id)
+                if tops in user.userPants.all():
+                    user.userPants.remove(tops)
                 else:
-                    user.userPants.add(pants)
+                    user.userPants.add(tops)
                 return Response()
-            except Pants.DoesNotExist:
+            except UserPants.DoesNotExist:
                 pass
         return Response(status=status.HTTP_404_NOT_FOUND)

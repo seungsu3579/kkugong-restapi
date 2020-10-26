@@ -13,6 +13,8 @@ class Pants(models.Model):
 
 
 class UserPants(models.Model):
+    id = models.AutoField(primary_key=True)
+    nickname = models.CharField(max_length=50, default=f"pants_{id}")
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="userPants", null=True
     )

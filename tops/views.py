@@ -11,8 +11,6 @@ from .form import TopUploadFileForm
 from config import settings
 from vectorization.message import Message
 
-from users.serializers import UserSerializer
-
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -38,7 +36,6 @@ def detail_userTops(request, id):
 @permission_classes([IsAuthenticated])
 def recognition(request):
     user = request.user
-    print(type(user))
     form = TopUploadFileForm(request.POST, request.FILES)
     if form.is_valid():
         top_obj = form.save()
@@ -57,8 +54,7 @@ def recognition(request):
         vector_ms = Message(
             settings.TOP_VECTORIZATION_HOST, settings.TOP_VECTORIZATION_PORT
         )
-        print(img_dir)
-        bit_vector = vector_ms.topToBit(img_dir)
+        bit_vector = vector_ms.imgToBit(img_dir)
 
         if bit_vector == b"":
             return Response(status=status.HTTP_404_NOT_FOUND)

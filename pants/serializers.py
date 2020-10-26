@@ -49,14 +49,18 @@ class UserPantsSerializer(serializers.ModelSerializer):
         model = UserPants
         fields = (
             "id",
+            "nickname",
             "user",
             "img",
             "meta_pants",
+            "jjim",
         )
 
         read_only_fields = (
             "id",
+            "nickname",
             "user",
             "img",
             "meta_pants",
+            "jjim",
         )

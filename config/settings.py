@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from . import secret
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "ax!#8cumq6**l%dqt0i_q)6kf^n7tzyzoefq+e7t4e-**cs1g&"
+SECRET_KEY = secret.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -112,17 +113,6 @@ DATABASES = {
         "NAME": os.path.join(BASE_DIR, "db_new.sqlite3"),
     }
 }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "kkugong",
-#         "USER": "kkugong_api",
-#         "PASSWORD": "tmp1234",
-#         "HOST": "172.17.0.3",
-#         "PORT": "3306",
-#         "OPTIONS": {"init_command": 'SET sql_mode="STRICT_TRANS_TABLES"'},
-#     }
-# }
 
 
 # Password validation
@@ -141,9 +131,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ko-kr"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia-Seoul"
 
 USE_I18N = True
 
@@ -158,9 +148,9 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 ### AWS ###
-AWS_ACCESS_KEY_ID = "AKIAT2WNRTLX4AWNEVOK"
-AWS_SECRET_ACCESS_KEY = "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"
-AWS_REGION = "ap-northeast-2"
+AWS_ACCESS_KEY_ID = secret.AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = secret.AWS_SECRET_ACCESS_KEY
+AWS_REGION = secret.AWS_REGION
 
 ### S3 Storages ###
 AWS_STORAGE_BUCKET_NAME = "dressroom-base-data"
