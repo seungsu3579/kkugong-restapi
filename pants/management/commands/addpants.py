@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from pants.models import Pants, PantsImage
 from config import settings
 import socket
+import boto3
 
 
 class Command(BaseCommand):
@@ -44,12 +45,32 @@ class Command(BaseCommand):
             if id[3] == "2":
                 print(f"Add  {id}")
                 if not Pants.objects.filter(id=id):
-                    pants = Pants.objects.create(
-                        id=id,
-                        brand=j[id]["brand"],
-                        product=j[id]["product"],
-                        item_url=j[id]["url"],
-                    )
+
+                    # check image in s3
+                    addFlag = False
+                    for q, img_url in enumerate(j[id]["img"]):
+                        img_id = id + "_" + str(q + 1)
+                        img = f"pants/{img_id}.jpg"
+                        try:
+                            s3.get_object(Bucket="dressroom-base-data", Key=img)
+                            print(f"Add  {id}", end=" ")
+                            addFlag = True
+                            break
+                        except:
+                            pass
+
+                    # if image in s3 create instance
+                    if addFlag:
+                        pants = Pants.objects.create(
+                            id=id,
+                            brand=j[id]["brand"],
+                            product=j[id]["product"],
+                            item_url=j[id]["url"],
+                            category=j[id]["sub_category"],
+                            shop=j[id]["shop"],
+                        )
+                    else:
+                        continue
 
                     if len(j[id]["img"]) == 1:
                         img_id = id
@@ -67,13 +88,14 @@ class Command(BaseCommand):
                                 vector=data,
                                 pants=pants,
                             )
-
+                            print(f"O", end=" ")
                         except:
+                            print(f"X", end=" ")
                             continue
 
                     else:
                         count = 1
-                        for img_url in j[id]["img"]:
+                        for img_url in j[id]["img"][0:1]:
                             img_id = id + "_" + str(count + 1)
                             img = f"pants/{img_id}.jpg"
 
@@ -90,8 +112,11 @@ class Command(BaseCommand):
                                     pants=pants,
                                 )
                                 count += 1
+                                print(f"O", end=" ")
                             except:
+                                print(f"X", end=" ")
                                 pass
+                    print()
 
         self.stdout.write(
             self.style.SUCCESS(f"All items from file({file}) is added to Database!")

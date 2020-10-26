@@ -8,6 +8,8 @@ class Pants(models.Model):
     brand = models.CharField(max_length=50)
     product = models.CharField(max_length=100)
     item_url = models.CharField(max_length=150)
+    category = models.CharField(max_length=100)
+    shop = models.CharField(max_length=100)
 
 
 class UserPants(models.Model):
@@ -19,6 +21,7 @@ class UserPants(models.Model):
     meta_pants = models.ForeignKey(
         Pants, on_delete=models.SET_NULL, related_name="similarThings", null=True,
     )
+    jjim = models.BooleanField(default=False)
 
 
 class PantsImage(models.Model):

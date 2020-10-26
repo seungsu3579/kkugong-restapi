@@ -56,8 +56,6 @@ def create_account(request):
         "email",
         "gender",
         "birthday",
-        "nickname",
-        "age",
     ]
     for field in check_fields:
         if field not in list(request.data.keys()):

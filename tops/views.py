@@ -106,6 +106,7 @@ class UserTopsView(APIView):
         userTop_id = request.data.get("userTop_obj")
         userTop = UserTops.objects.get(id=userTop_id)
         userTop.img = request.data.get("save_img")
+        userTop.nickname = request.data.get("cloth_nickname")
 
         save_vector = request.data.get("save_vector")
         if userTop is not None:

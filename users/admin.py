@@ -6,10 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 @admin.register(models.User)
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
-        (
-            "Custom Profile",
-            {"fields": ("avatar", "gender", "birthday", "name", "nickname", "age",)},
-        ),
+        ("Custom Profile", {"fields": ("gender", "birthday", "name")},),
     )
 
 

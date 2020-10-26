@@ -30,19 +30,19 @@ ALLOWED_HOSTS = ["*"]
 
 # External Application Info
 TOP_RECOGNITION_HOST = "172.17.0.4"
-TOP_RECOGNITION_PORT = 8888
+TOP_RECOGNITION_PORT = 10011
 TOP_VECTORIZATION_HOST = "172.17.0.3"
 TOP_VECTORIZATION_PORT = 10001
 
 PANTS_RECOGNITION_HOST = "172.17.0.4"
-PANTS_RECOGNITION_PORT = 8888
+PANTS_RECOGNITION_PORT = 10012
 PANTS_VECTORIZATION_HOST = "172.17.0.3"
-PANTS_VECTORIZATION_PORT = 10001
+PANTS_VECTORIZATION_PORT = 10002
 
 SHOES_RECOGNITION_HOST = "172.17.0.4"
-SHOES_RECOGNITION_PORT = 8888
+SHOES_RECOGNITION_PORT = 10013
 SHOES_VECTORIZATION_HOST = "172.17.0.3"
-SHOES_VECTORIZATION_PORT = 10001
+SHOES_VECTORIZATION_PORT = 10003
 
 
 # Application definition
@@ -61,6 +61,8 @@ PROJECT_APPS = [
     "tops.apps.TopsConfig",
     "pants.apps.PantsConfig",
     "shoes.apps.ShoesConfig",
+    "cody.apps.CodyConfig",
+    "shop.apps.ShopConfig",
 ]
 
 THIRD_PARTY_APPS = [
@@ -107,7 +109,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db_test.sqlite3"),
+        "NAME": os.path.join(BASE_DIR, "db_new.sqlite3"),
     }
 }
 # DATABASES = {

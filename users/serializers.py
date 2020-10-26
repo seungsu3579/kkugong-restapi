@@ -19,12 +19,9 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "email",
-            "avatar",
             "password",
             "gender",
             "birthday",
-            "nickname",
-            "age",
         )
         # "tops",
         # "pants",
@@ -38,18 +35,18 @@ class UserSerializer(serializers.ModelSerializer):
         if self.instance:
             raise serializers.ValidationError("You can't change username(id)")
 
-    def validate_nickname(self, nickname):
-        if len(nickname.encode()) <= 5:
-            raise serializers.ValidationError("too short nickname!")
-        if len(nickname.encode()) > 18:
-            raise serializers.ValidationError("too long nickname!")
-        return nickname
+    # def validate_nickname(self, nickname):
+    #     if len(nickname.encode()) <= 5:
+    #         raise serializers.ValidationError("too short nickname!")
+    #     if len(nickname.encode()) > 18:
+    #         raise serializers.ValidationError("too long nickname!")
+    #     return nickname
 
-    def validate_age(self, age):
-        age = int(age)
-        if age < 5 or age > 100:
-            raise serializers.ValidationError("Invalid age!")
-        return age
+    # def validate_age(self, age):
+    #     age = int(age)
+    #     if age < 5 or age > 100:
+    #         raise serializers.ValidationError("Invalid age!")
+    #     return age
 
     def create(self, validated_data):
         password = validated_data.get("password")  # 암호화할 비밀번호 get

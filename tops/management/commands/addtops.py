@@ -65,6 +65,8 @@ class Command(BaseCommand):
                             brand=j[id]["brand"],
                             product=j[id]["product"],
                             item_url=j[id]["url"],
+                            category=j[id]["sub_category"],
+                            shop=j[id]["shop"],
                         )
                     else:
                         continue
@@ -92,7 +94,7 @@ class Command(BaseCommand):
 
                     else:
                         count = 1
-                        for img_url in j[id]["img"]:
+                        for img_url in j[id]["img"][0:1]:
                             img_id = id + "_" + str(count)
                             img = f"top/{img_id}.jpg"
 
