@@ -89,7 +89,7 @@ class UserShoesView(APIView):
 
     def get(self, request):
         user = request.user
-        serializer = ShoesSerializer(user.userShoes.all(), many=True)
+        serializer = UserShoesSerializer(user.userShoes.all(), many=True)
         return Response(serializer.data)
 
     def post(self, request):

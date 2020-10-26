@@ -91,7 +91,7 @@ class UserPantsView(APIView):
 
     def get(self, request):
         user = request.user
-        serializer = PantsSerializer(user.userPants.all(), many=True)
+        serializer = UserPantsSerializer(user.userPants.all(), many=True)
         return Response(serializer.data)
 
     def post(self, request):
