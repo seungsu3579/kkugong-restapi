@@ -15,7 +15,7 @@ class UserTopsAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Custom Profile",
-            {"fields": ("id", "nickname", "user", "img", "meta_top", "jjim",)},
+            {"fields": ("nickname", "user", "img", "meta_top", "jjim",)},
         ),
     )
 

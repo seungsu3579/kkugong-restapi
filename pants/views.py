@@ -114,10 +114,9 @@ class UserPantsView(APIView):
                 similar_img = PantsImage.objects.get(id=save_vector)
                 userPants.meta_pants = similar_img.pants
                 userPants.vector = similar_img.vector
-                print(similar_img.vector)
-                print(similar_img.pants)
             userPants.save()
-            return Response()
+            serializer = UserPantsSerializer(userPants)
+            return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request):
@@ -130,7 +129,7 @@ class UserPantsView(APIView):
                     user.userPants.remove(tops)
                 else:
                     user.userPants.add(tops)
-                return Response()
+                return Response(status=status.HTTP_200_OK)
             except UserPants.DoesNotExist:
                 pass
         return Response(status=status.HTTP_404_NOT_FOUND)

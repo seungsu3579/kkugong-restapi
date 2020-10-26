@@ -112,10 +112,9 @@ class UserTopsView(APIView):
                 similar_img = TopsImage.objects.get(id=save_vector)
                 userTop.meta_top = similar_img.top
                 userTop.vector = similar_img.vector
-                print(similar_img.vector)
-                print(similar_img.top)
             userTop.save()
-            return Response()
+            serializer = UserTopsSerializer(userTop)
+            return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request):
@@ -128,7 +127,7 @@ class UserTopsView(APIView):
                     user.userTops.remove(tops)
                 else:
                     user.userTops.add(tops)
-                return Response()
+                return Response(status=status.HTTP_200_OK)
             except UserTops.DoesNotExist:
                 pass
         return Response(status=status.HTTP_404_NOT_FOUND)
