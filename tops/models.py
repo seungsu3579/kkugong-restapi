@@ -14,7 +14,7 @@ class Tops(models.Model):
 
 class UserTops(models.Model):
     id = models.AutoField(primary_key=True)
-    nickname = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=50, default=f"top_{id}")
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="userTops", null=True
     )
