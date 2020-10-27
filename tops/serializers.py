@@ -64,3 +64,18 @@ class UserTopsSerializer(serializers.ModelSerializer):
             "meta_top",
             "jjim",
         )
+
+
+class UserTopsImgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserTops
+        fields = (
+            "id",
+            "img",
+        )
+
+        read_only_fields = (
+            "id",
+            "img",
+        )
+

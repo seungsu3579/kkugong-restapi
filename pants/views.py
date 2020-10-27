@@ -10,6 +10,7 @@ from .models import Pants, UserPants, PantsImage
 from .form import PantsUploadFileForm
 from config import settings
 from vectorization.message import Message
+import numpy as np
 
 
 @api_view(["GET"])
@@ -56,15 +57,16 @@ def recognition(request):
             settings.PANTS_VECTORIZATION_HOST, settings.PANTS_VECTORIZATION_PORT
         )
         bit_vector = vector_ms.imgToBit(img_dir)
-        #
 
+        vector_for_recommend = vector_ms.bitToVector(bit_vector)
+        vector_for_recommend = np.append(vector_for_recommend, np.float32(1)).reshape(
+            1, 65
+        )
         if bit_vector == b"":
             return Response(status=status.HTTP_404_NOT_FOUND)
         else:
-            recommand_ms = Message(
-                settings.PANTS_RECOGNITION_HOST, settings.PANTS_RECOGNITION_PORT
-            )
-            recommands = recommand_ms.recommand(bit_vector)
+            recommand_ms = Message(settings.RECOGNITION_HOST, settings.RECOGNITION_PORT)
+            recommands = recommand_ms.recommand(vector_for_recommend.tostring())
 
             items = PantsImage.objects.filter(id__in=recommands)
 

@@ -1,14 +1,15 @@
 # -*- coding:utf-8 -*-
+import numpy as np
 import socket
 from utils import timelog
 
 
 class Message:
     def __init__(self, host, port):
-        self.TOP_HOST = host
-        self.TOP_PORT = port
+        self.HOST = host
+        self.PORT = port
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect((self.TOP_HOST, self.TOP_PORT))
+        self.client_socket.connect((self.HOST, self.PORT))
 
     def __del__(self):
         self.client_socket.close()
@@ -16,7 +17,6 @@ class Message:
     # @logging_time
     def imgToVector(self, img):
         # img : 이미지 이름(url)
-        import numpy as np
 
         self.client_socket.sendall(img.encode())
         data = self.client_socket.recv(1024)
@@ -26,7 +26,6 @@ class Message:
 
     def imgToBit(self, img):
         # img : 이미지 이름(url)
-        import numpy as np
 
         self.client_socket.sendall(img.encode())
         data = self.client_socket.recv(1024)
@@ -34,7 +33,6 @@ class Message:
         return data
 
     def bitToVector(self, data):
-        import numpy as np
 
         vector = np.frombuffer(data, dtype=np.float32).reshape(1, 64)
         return vector
@@ -51,3 +49,24 @@ class Message:
 
         return img_ids
 
+    def recommend_cody(self, data):
+        self.client_socket.sendall(data)
+        data = self.client_socket.recv(32768)
+        data = np.frombuffer(data, dtype=np.int64).reshape(-1, 4)
+        data = data.tolist()
+        return data
+
+    def recommend_item(self, data):
+        self.client_socket.sendall(data)
+        data = self.client_socket.recv(32768)
+        data = data.decode()
+
+        items = data.split("$")
+
+        for i in range(len(items)):
+            items[i] = items[i].split("#")
+            items[i][1] = items[i][1].split("/")
+
+        print(items)
+
+        return items

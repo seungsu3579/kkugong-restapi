@@ -10,6 +10,7 @@ from .models import Tops, UserTops, TopsImage
 from .form import TopUploadFileForm
 from config import settings
 from vectorization.message import Message
+import numpy as np
 
 
 @api_view(["GET"])
@@ -56,13 +57,16 @@ def recognition(request):
         )
         bit_vector = vector_ms.imgToBit(img_dir)
 
+        vector_for_recommend = vector_ms.bitToVector(bit_vector)
+        vector_for_recommend = np.append(vector_for_recommend, np.float32(0)).reshape(
+            1, 65
+        )
+
         if bit_vector == b"":
             return Response(status=status.HTTP_404_NOT_FOUND)
         else:
-            recommand_ms = Message(
-                settings.TOP_RECOGNITION_HOST, settings.TOP_RECOGNITION_PORT
-            )
-            recommands = recommand_ms.recommand(bit_vector)
+            recommand_ms = Message(settings.RECOGNITION_HOST, settings.RECOGNITION_PORT)
+            recommands = recommand_ms.recommand(vector_for_recommend.tostring())
 
             items = TopsImage.objects.filter(id__in=recommands)
 
