@@ -24,7 +24,7 @@ def step1(request):
         },
         "similar_things": [
             {
-                "id": "130100001651_1",
+                "id": "150100000000_1",
                 "img_url": "https://cdn-images.farfetch-contents.com/15/28/83/44/15288344_27690991_1000.jpg",
                 "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/top/130100001651_1.jpg",
                 "top": "130100001651",
@@ -153,3 +153,58 @@ def step1(request):
 @permission_classes([IsAuthenticated])
 def step2(request):
     pass
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def step2(request):
+    data = {
+        "userTop_obj": {
+            "id": 15,
+            "nickname": "top",
+            "user": 2,
+            "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/userTop/user1_top.jpg",
+            "meta_top": None,
+            "jjim": False,
+        },
+        "similar_things": [
+            {
+                "id": "200100000001_1",
+                "img_url": "https://cdn-images.farfetch-contents.com/15/28/83/44/15288344_27690991_1000.jpg",
+                "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/top/200100000001_1.jpg",
+                "top": "200100000001",
+            },
+            {
+                "id": "200100000002_1",
+                "img_url": "https://cdn-images.farfetch-contents.com/14/77/23/46/14772346_23714791_1000.jpg",
+                "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/top/200100000002_1.jpg",
+                "top": "200100000002",
+            },
+            {
+                "id": "200100000003_1",
+                "img_url": "https://cdn-images.farfetch-contents.com/14/82/70/31/14827031_24333536_1000.jpg",
+                "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/top/200100000003_1.jpg",
+                "top": "200100000003",
+            },
+            {
+                "id": "200100000004_1",
+                "img_url": "https://cdn-images.farfetch-contents.com/14/76/66/49/14766649_23901152_1000.jpg",
+                "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/top/200100000004_1.jpg",
+                "top": "200100000004",
+            },
+            {
+                "id": "200100000005_1",
+                "img_url": "https://cdn-images.farfetch-contents.com/14/44/26/64/14442664_21283558_1000.jpg",
+                "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/top/200100000005_1.jpg",
+                "top": "200100000005",
+            },
+            {
+                "id": "200100000006_1",
+                "img_url": "https://cdn-images.farfetch-contents.com/14/40/06/23/14400623_21520430_1000.jpg",
+                "img": "https://dressroom-base-data.s3.ap-northeast-2.amazonaws.com/top/200100000006_1.jpg",
+                "top": "200100000006",
+            },
+        ],
+    }
+
+    return JsonResponse(data, safe=False, json_dumps_params={"ensure_ascii": False})

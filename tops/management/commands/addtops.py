@@ -25,9 +25,9 @@ class Command(BaseCommand):
         ################
 
         ###### s3 ######
-        AWS_ACCESS_KEY_ID = "AKIAT2WNRTLX4AWNEVOK"
-        AWS_SECRET_ACCESS_KEY = "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"
-        AWS_REGION = "ap-northeast-2"
+        AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+        AWS_REGION = settings.AWS_REGION
 
         s3 = boto3.client(
             "s3",
