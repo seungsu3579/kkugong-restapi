@@ -72,6 +72,7 @@ PROJECT_APPS = [
     "shoes.apps.ShoesConfig",
     "cody.apps.CodyConfig",
     "shop.apps.ShopConfig",
+    "scenario.apps.ScenarioConfig",
 ]
 
 THIRD_PARTY_APPS = [

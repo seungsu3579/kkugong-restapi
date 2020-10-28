@@ -4,7 +4,8 @@ import base64
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from config import settings
@@ -23,6 +24,7 @@ from vectorization.message import Message
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def cody_recommend_tops(request, id):
     usertop = UserTops.objects.get(id=id)
     bit_vector = usertop.vector
@@ -40,6 +42,7 @@ def cody_recommend_tops(request, id):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def cody_recommend_pants(request, id):
     userpants = UserTops.objects.get(id=id)
     bit_vector = userpants.vector
@@ -57,6 +60,7 @@ def cody_recommend_pants(request, id):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def cody_recommend_shoes(request, id):
     usershoes = UserTops.objects.get(id=id)
     bit_vector = usershoes.vector
@@ -74,6 +78,7 @@ def cody_recommend_shoes(request, id):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def cody_recommend_all(request):
     user = User.objects.get(username=request.user)
     userTops_serializer = UserTopsSerializer(user.userTops.all(), many=True)
@@ -149,12 +154,3 @@ def cody_recommend_all(request):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(["GET"])
-def cody_detail(request):
-    # 코디 아이디를 받아 top,pants,shoes 리스트 반환
-    cody_id = request.data.get("cody_id")
-
-    pass
-
