@@ -43,21 +43,38 @@ class ShoesSerializer(serializers.ModelSerializer):
 
 
 class UserShoesSerializer(serializers.ModelSerializer):
-    meta_shoes = ShoesSerializer(many=True, read_only=True)
+    meta_shoes = ShoesSerializer(read_only=True)
 
     class Meta:
         model = UserShoes
         fields = (
             "id",
+            "nickname",
             "user",
             "img",
             "meta_shoes",
+            "jjim",
         )
 
         read_only_fields = (
             "id",
+            "nickname",
             "user",
             "img",
             "meta_shoes",
+            "jjim",
         )
 
+
+class UserShoesImgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserShoes
+        fields = (
+            "id",
+            "img",
+        )
+
+        read_only_fields = (
+            "id",
+            "img",
+        )

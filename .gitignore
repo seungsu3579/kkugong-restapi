@@ -1,1 +1,4 @@
 *.jpg
+# *.sqlite3
+*.json
+secret.py

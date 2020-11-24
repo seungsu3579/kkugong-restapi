@@ -43,20 +43,38 @@ class PantsSerializer(serializers.ModelSerializer):
 
 
 class UserPantsSerializer(serializers.ModelSerializer):
-    meta_pants = PantsSerializer(many=True, read_only=True)
+    meta_pants = PantsSerializer(read_only=True)
 
     class Meta:
         model = UserPants
         fields = (
             "id",
+            "nickname",
             "user",
             "img",
             "meta_pants",
+            "jjim",
         )
 
         read_only_fields = (
             "id",
+            "nickname",
             "user",
             "img",
             "meta_pants",
+            "jjim",
+        )
+
+
+class UserPantsImgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserPants
+        fields = (
+            "id",
+            "img",
+        )
+
+        read_only_fields = (
+            "id",
+            "img",
         )

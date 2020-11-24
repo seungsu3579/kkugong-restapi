@@ -10,8 +10,7 @@ from .models import Tops, UserTops, TopsImage
 from .form import TopUploadFileForm
 from config import settings
 from vectorization.message import Message
-
-from users.serializers import UserSerializer
+import numpy as np
 
 
 @api_view(["GET"])
@@ -38,11 +37,11 @@ def detail_userTops(request, id):
 @permission_classes([IsAuthenticated])
 def recognition(request):
     user = request.user
-    print(type(user))
     form = TopUploadFileForm(request.POST, request.FILES)
     if form.is_valid():
         top_obj = form.save()
-        img_dir = settings.MEDIA_ROOT + "/" + str(top_obj.img)
+        img_dir = str(top_obj.img)
+        # img_dir = settings.MEDIA_ROOT + "/" + str(top_obj.img)
         # change image file format
         if img_dir[-3:] != "jpg":
             tmp_img = Image.open(img_dir).convert("RGB")
@@ -56,15 +55,18 @@ def recognition(request):
         vector_ms = Message(
             settings.TOP_VECTORIZATION_HOST, settings.TOP_VECTORIZATION_PORT
         )
-        bit_vector = vector_ms.topToBit(img_dir)
+        bit_vector = vector_ms.imgToBit(img_dir)
+
+        vector_for_recommend = vector_ms.bitToVector(bit_vector)
+        vector_for_recommend = np.append(vector_for_recommend, np.float32(0)).reshape(
+            1, 65
+        )
 
         if bit_vector == b"":
             return Response(status=status.HTTP_404_NOT_FOUND)
         else:
-            recommand_ms = Message(
-                settings.TOP_RECOGNITION_HOST, settings.TOP_RECOGNITION_PORT
-            )
-            recommands = recommand_ms.recommand(bit_vector)
+            recommand_ms = Message(settings.RECOGNITION_HOST, settings.RECOGNITION_PORT)
+            recommands = recommand_ms.recommand(vector_for_recommend.tostring())
 
             items = TopsImage.objects.filter(id__in=recommands)
 
@@ -104,6 +106,7 @@ class UserTopsView(APIView):
         userTop_id = request.data.get("userTop_obj")
         userTop = UserTops.objects.get(id=userTop_id)
         userTop.img = request.data.get("save_img")
+        userTop.nickname = request.data.get("cloth_nickname")
 
         save_vector = request.data.get("save_vector")
         if userTop is not None:
@@ -113,10 +116,9 @@ class UserTopsView(APIView):
                 similar_img = TopsImage.objects.get(id=save_vector)
                 userTop.meta_top = similar_img.top
                 userTop.vector = similar_img.vector
-                print(similar_img.vector)
-                print(similar_img.top)
             userTop.save()
-            return Response()
+            serializer = UserTopsSerializer(userTop)
+            return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request):
@@ -129,7 +131,7 @@ class UserTopsView(APIView):
                     user.userTops.remove(tops)
                 else:
                     user.userTops.add(tops)
-                return Response()
+                return Response(status=status.HTTP_200_OK)
             except UserTops.DoesNotExist:
                 pass
         return Response(status=status.HTTP_404_NOT_FOUND)

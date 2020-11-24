@@ -12,7 +12,12 @@ class TopsAdmin(admin.ModelAdmin):
 
 @admin.register(models.UserTops)
 class UserTopsAdmin(admin.ModelAdmin):
-    fieldsets = (("Custom Profile", {"fields": ("id", "user", "img", "meta_top",)},),)
+    fieldsets = (
+        (
+            "Custom Profile",
+            {"fields": ("nickname", "user", "img", "meta_top", "jjim",)},
+        ),
+    )
 
 
 @admin.register(models.TopsImage)

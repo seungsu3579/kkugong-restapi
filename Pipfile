@@ -15,6 +15,9 @@ djangorestframework = "*"
 mysqlclient = "*"
 numpy = "*"
 pandas = "*"
+boto3 = "*"
+django-storages = "*"
+tqdm = "*"
 
 [requires]
 python_version = "3.7"

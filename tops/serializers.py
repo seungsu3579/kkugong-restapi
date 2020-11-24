@@ -48,13 +48,34 @@ class UserTopsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTops
         fields = (
+            "id",
+            "nickname",
             "user",
             "img",
             "meta_top",
+            "jjim",
         )
 
         read_only_fields = (
+            "id",
+            "nickname",
             "user",
             "img",
             "meta_top",
+            "jjim",
         )
+
+
+class UserTopsImgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserTops
+        fields = (
+            "id",
+            "img",
+        )
+
+        read_only_fields = (
+            "id",
+            "img",
+        )
+

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from . import secret
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "ax!#8cumq6**l%dqt0i_q)6kf^n7tzyzoefq+e7t4e-**cs1g&"
+SECRET_KEY = secret.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,20 +30,28 @@ ALLOWED_HOSTS = ["*"]
 
 
 # External Application Info
-TOP_RECOGNITION_HOST = "172.17.0.6"
-TOP_RECOGNITION_PORT = 8888
-TOP_VECTORIZATION_HOST = "172.17.0.5"
+RECOGNITION_HOST = "172.17.0.4"
+RECOGNITION_PORT = 10011
+
+ITEMBASE_CODY_RECOMMENDER_HOST = "172.17.0.4"
+ITEMBASE_CODY_RECOMMENDER_PORT = 10012
+
+CODY_RECOMMENDER_HOST = "172.17.0.4"
+CODY_RECOMMENDER_PORT = 10013
+
+ITEM_RECOMMENDER_HOST = "172.17.0.4"
+ITEM_RECOMMENDER_PORT = 10014
+
+
+# vectorization model server
+TOP_VECTORIZATION_HOST = "172.17.0.3"
 TOP_VECTORIZATION_PORT = 10001
 
-PANTS_RECOGNITION_HOST = "172.17.0.6"
-PANTS_RECOGNITION_PORT = 8888
-PANTS_VECTORIZATION_HOST = "172.17.0.5"
-PANTS_VECTORIZATION_PORT = 10001
+PANTS_VECTORIZATION_HOST = "172.17.0.3"
+PANTS_VECTORIZATION_PORT = 10002
 
-SHOES_RECOGNITION_HOST = "172.17.0.6"
-SHOES_RECOGNITION_PORT = 8888
-SHOES_VECTORIZATION_HOST = "172.17.0.5"
-SHOES_VECTORIZATION_PORT = 10001
+SHOES_VECTORIZATION_HOST = "172.17.0.3"
+SHOES_VECTORIZATION_PORT = 10003
 
 
 # Application definition
@@ -61,9 +70,13 @@ PROJECT_APPS = [
     "tops.apps.TopsConfig",
     "pants.apps.PantsConfig",
     "shoes.apps.ShoesConfig",
+    "cody.apps.CodyConfig",
+    "shop.apps.ShopConfig",
+    "scenario.apps.ScenarioConfig",
 ]
 
 THIRD_PARTY_APPS = [
+    "storages",
     "rest_framework",
 ]
 
@@ -106,20 +119,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": os.path.join(BASE_DIR, "db_new.sqlite3"),
     }
 }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "kkugong",
-#         "USER": "kkugong_api",
-#         "PASSWORD": "tmp1234",
-#         "HOST": "172.17.0.3",
-#         "PORT": "3306",
-#         "OPTIONS": {"init_command": 'SET sql_mode="STRICT_TRANS_TABLES"'},
-#     }
-# }
 
 
 # Password validation
@@ -138,9 +140,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ko-kr"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -153,6 +155,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+### AWS ###
+AWS_ACCESS_KEY_ID = secret.AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = secret.AWS_SECRET_ACCESS_KEY
+AWS_REGION = secret.AWS_REGION
+
+### S3 Storages ###
+AWS_STORAGE_BUCKET_NAME = "dressroom-base-data"
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com"
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 

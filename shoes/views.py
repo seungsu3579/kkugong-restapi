@@ -10,6 +10,7 @@ from .models import Shoes, UserShoes, ShoesImage
 from .form import ShoesUploadFileForm
 from config import settings
 from vectorization.message import Message
+import numpy as np
 
 
 @api_view(["GET"])
@@ -39,38 +40,51 @@ def recognition(request):
     form = ShoesUploadFileForm(request.POST, request.FILES)
     if form.is_valid():
         shoes_obj = form.save()
-        img_dir = settings.MEDIA_ROOT + "/" + str(shoes_obj.img)
+        img_dir = str(shoes_obj.img)
+        # img_dir = settings.MEDIA_ROOT + "/" + str(shoes_obj.img)
         if img_dir[-3:] != "jpg":
-
             tmp_img = Image.open(img_dir).convert("RGB")
             img_extension = img_dir[-3:]
 
             img_dir = img_dir[:-3] + "jpg"
             tmp_img.save(img_dir)
             os.remove(img_dir[:-3] + img_extension)
-            shoes_obj.img = img_dir
-        print(shoes_obj.img)
-        print(vars(shoes_obj))
+            shoes_obj.img = str(shoes_obj.img)[:-3] + "jpg"
 
         # set shoes recognition server
         vector_ms = Message(
             settings.SHOES_VECTORIZATION_HOST, settings.SHOES_VECTORIZATION_PORT
         )
-        bit_vector = vector_ms.topToBit(img_dir)
+        bit_vector = vector_ms.imgToBit(img_dir)
+
+        vector_for_recommend = vector_ms.bitToVector(bit_vector)
+        vector_for_recommend = np.append(vector_for_recommend, np.float32(2)).reshape(
+            1, 65
+        )
 
         if bit_vector == b"":
             return Response(status=status.HTTP_404_NOT_FOUND)
         else:
-            recommand_ms = Message(
-                settings.SHOES_RECOGNITION_HOST, settings.SHOES_RECOGNITION_PORT
-            )
-            recommands = recommand_ms.recommand(bit_vector)
+            recommand_ms = Message(settings.RECOGNITION_HOST, settings.RECOGNITION_PORT)
+            recommands = recommand_ms.recommand(vector_for_recommend.tostring())
 
             items = ShoesImage.objects.filter(id__in=recommands)
 
-        serializer = ShoesImageSerializer(items, many=True)
+        shoesImage_serializer = ShoesImageSerializer(items, many=True)
 
-    return Response(serializer.data)
+        shoes_obj.user = user
+        shoes_obj.vector = bit_vector
+        shoes_obj.save()
+
+        userShoes_serializer = UserShoesSerializer(shoes_obj)
+
+        new_dict = {
+            "userShoes_obj": userShoes_serializer.data,
+            "similar_things": shoesImage_serializer.data,
+        }
+
+        return Response(new_dict)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserShoesView(APIView):
@@ -79,8 +93,33 @@ class UserShoesView(APIView):
 
     def get(self, request):
         user = request.user
-        serializer = ShoesSerializer(user.userShoes.all(), many=True)
+        serializer = UserShoesSerializer(user.userShoes.all(), many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        # request : {
+        #     "userShoes_obj" : { return of id user shoes obj },
+        #     "save_img" : { image that show on the app },
+        #     "save_vector" : { image that representative vector },
+        # }
+
+        userShoes_id = request.data.get("userShoes_obj")
+        userShoes = UserShoes.objects.get(id=userShoes_id)
+        userShoes.img = request.data.get("save_img")
+        userShoes.nickname = request.data.get("cloth_nickname")
+
+        save_vector = request.data.get("save_vector")
+        if userShoes is not None:
+            if save_vector is None:
+                pass
+            else:
+                similar_img = ShoesImage.objects.get(id=save_vector)
+                userShoes.meta_shoes = similar_img.shoes
+                userShoes.vector = similar_img.vector
+            userShoes.save()
+            serializer = UserShoesSerializer(userShoes)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request):
         user = request.user
@@ -92,7 +131,7 @@ class UserShoesView(APIView):
                     user.userShoes.remove(shoes)
                 else:
                     user.userShoes.add(shoes)
-                return Response()
-            except Shoes.DoesNotExist:
+                return Response(status=status.HTTP_200_OK)
+            except UserShoes.DoesNotExist:
                 pass
         return Response(status=status.HTTP_404_NOT_FOUND)

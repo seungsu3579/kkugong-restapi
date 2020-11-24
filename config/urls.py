@@ -24,6 +24,9 @@ urlpatterns = [
     path("kkugong/v1/tops/", include("tops.urls")),
     path("kkugong/v1/pants/", include("pants.urls")),
     path("kkugong/v1/shoes/", include("shoes.urls")),
+    path("kkugong/v1/cody/", include("cody.urls")),
+    path("kkugong/v1/shop/", include("shop.urls")),
+    path("kkugong/v1/scenario/", include("scenario.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
